@@ -16,7 +16,7 @@ module tb_top;
     initial begin
         rst_n = 1'b0;
         repeat(5) @(posedge clk);
-        rstn_n = 1'b1;
+        rst_n = 1'b1;
     end
 
     // Interfaces an DUT instances
