@@ -8,7 +8,7 @@ class apb_seq_item extends uvm_sequence_item;
     bit [31:0]      rdata;  // only meaningful when write == 0
     bit             slverr;
 
-    `uvm_component_utils(apb_seq_item)
+    `uvm_object_utils(apb_seq_item)
 
     function new(string name = "apb_seq_item");
         super.new(name);

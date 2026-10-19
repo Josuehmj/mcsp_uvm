@@ -1,6 +1,6 @@
 // 1. base sequence
-class abp_base_seq extends uvm_sequence #(apb_seq_item);
-    `uvm_object_utils(abp_base_seq)
+class apb_base_seq extends uvm_sequence #(apb_seq_item);
+    `uvm_object_utils(apb_base_seq)
 
     function new(string name = "apb_base_seq");
         super.new(name);
@@ -10,7 +10,7 @@ class abp_base_seq extends uvm_sequence #(apb_seq_item);
     task write(bit [11:0] addr, bit [31:0] data);
         apb_seq_item item = apb_seq_item::type_id::create("wr_item");
         start_item(item);
-        if (!item.randomize() with {write == 1; addr = local::addr; wdata == local::data;})
+        if (!item.randomize() with {write == 1; addr == local::addr; wdata == local::data;})
             `uvm_fatal(get_type_name(), "randomize failed in write()")
         finish_item(item);
         `uvm_info(get_type_name(), item.convert2string(), UVM_HIGH)
@@ -86,7 +86,7 @@ class apb_write_read_seq extends apb_base_seq;
         read(addr, readback);
         if ((readback & mask) !== (data & mask))
             `uvm_error(get_type_name(),
-                       $sformatf("Readback mismatch at 0x%03h: wrote 0x%08h, read 0x%08h (mask 0x%08h)".
+                       $sformatf("Readback mismatch at 0x%03h: wrote 0x%08h, read 0x%08h (mask 0x%08h)",
                                  addr, data, readback, mask))
     endtask
 endclass
@@ -118,7 +118,7 @@ class apb_random_seq extends apb_base_seq;
               `uvm_fatal(get_type_name(), "randomized failed in body()")
             finish_item(item);
             `uvm_info(get_type_name(), item.convert2string(), UVM_HIGH)
-            if (item.slverrf)
+            if (item.slverr)
                 `uvm_error(get_type_name(),
                            $sformatf("Unexpected PSLVERR: %s", item.convert2string()))
         end
@@ -164,7 +164,7 @@ class apb_error_seq extends apb_base_seq;
                     end
                     finish_item(item);
                     `uvm_info(get_type_name(), item.convert2string(), UVM_HIGH)
-                    if (item.pslverr !== 1'b1)
+                    if (item.slverr !== 1'b1)
                         `uvm_error(get_type_name(),
                                    $sformatf("Expected PSLVERR but gone none: %s", item.convert2string()))
                 end

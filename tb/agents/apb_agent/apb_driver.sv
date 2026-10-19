@@ -35,7 +35,7 @@ class apb_driver extends uvm_driver #(apb_seq_item);
         v_apb_interface.driver_cb.psel      <= 1'b0;
         v_apb_interface.driver_cb.penable   <= 1'b0;
         v_apb_interface.driver_cb.pwrite    <= 1'b0;
-        v_apb_interface.driver_cb.addr      <= '0;
+        v_apb_interface.driver_cb.paddr      <= '0;
         v_apb_interface.driver_cb.pwdata    <= '0;
     endtask
 
